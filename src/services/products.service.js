@@ -1,5 +1,6 @@
 const { productsModel } = require('../models');
-const { idSchema } = require('./validations/schemas');
+const { idSchema } = require('../validations/schemas');
+const validateProductName = require('../validations/validateProductName');
 
 const getProducts = async () => {
   const products = await productsModel.getProducts();
@@ -18,7 +19,9 @@ const getById = async (id) => {
 };
 
 const createProduct = async (name) => {
-  // validação
+  const error = validateProductName(name);
+  if (error) return error;
+
   const newProductId = await productsModel.createProduct(name);
   const newProduct = await productsModel.getById(newProductId);
 

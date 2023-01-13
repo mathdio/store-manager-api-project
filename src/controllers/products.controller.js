@@ -18,7 +18,6 @@ const getById = async (req, res) => {
 
 const createProduct = async (req, res) => {
   const { name } = req.body;
-  // if (!name) return {}
   const { type, message } = await productsService.createProduct(name);
   if (type) return res.status(mapError(type)).json({ message });
 
