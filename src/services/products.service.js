@@ -35,10 +35,10 @@ const editProduct = async (id, name) => {
   const isAvailable = await productsModel.getById(id);
   if (!isAvailable) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
 
-  const editedProductId = await productsModel.editProduct(id, name);
-  const editedProduct = await productsModel.getById(id); 
+  await productsModel.editProduct(id, name);
+  const editedProduct = await productsModel.getById(id);
 
-  return { type: null, message: editedProductId };
+  return { type: null, message: editedProduct };
 };
 
 module.exports = {
