@@ -1,4 +1,4 @@
-const { productsModel, salesModel } = require('../models');
+const { salesModel } = require('../models');
 // const validateSalesInputFields = require('../validations/validateSalesInputFields');
 
 // const createSales = async (salesToCreate) => {
