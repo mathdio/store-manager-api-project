@@ -1,14 +1,14 @@
 const { mapError } = require('../utils/errorMap');
 const { salesService } = require('../services');
 
-const createSales = async (req, res) => {
-  const salesToCreate = req.body;
-  // validar se é array?
-  const { type, message } = await salesService.createSales(salesToCreate);
-  if (type) return res.status(mapError(type)).json({ message });
+// const createSales = async (req, res) => {
+//   const salesToCreate = req.body;
+  
+//   const { type, message } = await salesService.createSales(salesToCreate);
+//   if (type) return res.status(mapError(type)).json({ message });
 
-  return res.status(201).json(message);
-};
+//   return res.status(201).json(message);
+// };
 
 const getSales = async (_req, res) => {
   const { type, message } = await salesService.getSales();
@@ -27,7 +27,7 @@ const getById = async (req, res) => {
 };
 
 module.exports = {
-  createSales,
+  // createSales,
   getSales,
   getById,
 };
