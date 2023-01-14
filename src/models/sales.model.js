@@ -25,7 +25,20 @@ const createSaleInfo = async (saleId, salesToCreate) => {
   return newSale;
 };
 
+const getSales = async () => {
+  const [result] = await connection.execute(
+    `SELECT sp.sale_id AS saleId, s.date, sp.product_id AS productId, sp.quantity
+    FROM sales AS s
+    INNER JOIN sales_products AS sp
+    ON s.id = sp.sale_id
+    ORDER BY saleId, productId`,
+  );
+
+  return result;
+};
+
 module.exports = {
   createSaleId,
   createSaleInfo,
+  getSales,
 };
