@@ -41,9 +41,23 @@ const editProduct = async (id, name) => {
   return { type: null, message: editedProduct };
 };
 
+const deleteProduct = async (id) => {
+  const error = idSchema.validate(id);
+  if (error.type) return error;
+
+  const isAvailable = await productsModel.getById(id);
+  if (!isAvailable) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+
+  await productsModel.deleteProduct(id);
+  
+  const wasDeleted = await productsModel.getById(id);
+  if (!wasDeleted) return { type: null, message: '' };
+};
+
 module.exports = {
   getProducts,
   getById,
   createProduct,
   editProduct,
+  deleteProduct,
 };
