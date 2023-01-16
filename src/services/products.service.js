@@ -43,7 +43,7 @@ const editProduct = async (id, name) => {
 
 const deleteProduct = async (id) => {
   const error = validateId(id);
-  if (error.type) return error;
+  if (error) return error;
 
   const isAvailable = await productsModel.getById(id);
   if (!isAvailable) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };

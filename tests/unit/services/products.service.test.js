@@ -80,7 +80,7 @@ describe('Products Service\'s unit tests', function () {
         message: '"name" length must be at least 5 characters long',
       };
 
-      const result = await productsService.createProduct(invalidName);
+      const result = await productsService.editProduct(1, invalidName);
       expect(result).to.deep.equal(expected);
     });
 
@@ -103,6 +103,44 @@ describe('Products Service\'s unit tests', function () {
       sinon.stub(productsModel, "getById").resolves(singleProduct);
 
       const result = await productsService.editProduct(1, 'Martelo');
+      expect(result).to.deep.equal(expected);
+    });
+  });
+
+  describe("Delete a product", function () {
+    it("If it returns invalid id error", async function () {
+      const expected = {
+        type: "INVALID_INPUT",
+        message: "id value mus be greater than or equal to 1",
+      };
+
+      const result = await productsService.deleteProduct(0);
+      expect(result).to.deep.equal(expected);
+    });
+
+    it("If it returns PRODUCT_NOT_FOUND error", async function () {
+      const mockResolve = undefined;
+      const expected = {
+        type: "PRODUCT_NOT_FOUND",
+        message: "Product not found",
+      };
+
+      sinon.stub(productsModel, "getById").resolves(mockResolve);
+
+      const result = await productsService.deleteProduct(1);
+      expect(result).to.deep.equal(expected);
+    });
+
+    it("If it returns edited product successfully", async function () {
+      const mockResolve = undefined;
+      const expected = { type: null, message: '' };
+
+      const stub = sinon.stub(productsModel, "getById");
+      
+      stub.onCall(0).resolves(1);
+      stub.onCall(1).resolves(mockResolve);
+
+      const result = await productsService.deleteProduct(1);
       expect(result).to.deep.equal(expected);
     });
   });
