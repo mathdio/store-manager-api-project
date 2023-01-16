@@ -9,13 +9,13 @@ const productsList = [
   },
   {
     id: 1,
-    name: "Escudo do CApitão América",
+    name: 'Escudo do Capitão América',
   },
 ];
 
 const singleProduct = {
   id: 1,
-  name: "Martelo de Thor",
+  name: 'Martelo de Thor',
 };
 
 module.exports = {

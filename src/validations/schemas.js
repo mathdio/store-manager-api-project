@@ -1,9 +1,17 @@
 const Joi = require('joi');
 
-const idSchema = Joi.number().integer().min(1).required();
+const validateId = (id) => {
+  if (id < 1 || id === undefined || typeof id !== 'number' || !Number.isInteger(id)) {
+    return {
+      type: 'INVALID_INPUT',
+      message: 'id value mus be greater than or equal to 1',
+    };
+  }
+};
+
 const productNameSchema = Joi.string().min(5).required();
 
 module.exports = {
-  idSchema,
+  validateId,
   productNameSchema,
 };
