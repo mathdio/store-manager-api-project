@@ -16,6 +16,6 @@ module.exports = async (salesToCreate) => {
   });
   const availabilityList = await Promise.all(areAvailable);
   if (availabilityList.some((product) => !product)) {
-    return { type: 'SALE_NOT_FOUND', message: 'Product not found' };
+    return { type: 'SALE_NOT_FOUND', message: availabilityList };
   }
 };

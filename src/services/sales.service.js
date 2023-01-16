@@ -1,14 +1,14 @@
 const { salesModel } = require('../models');
 const validateSalesInputFields = require('../validations/validateSalesInputFields');
 
-const createSales = async (salesToCreate) => {
-  const error = validateSalesInputFields(salesToCreate);
+const createSales = async (saleToCreate) => {
+  const error = validateSalesInputFields(saleToCreate);
   if (error) return error;
 
-  // const newSaleId = await salesModel.createSaleId();
-  // const newSale = await salesModel.createSaleInfo(newSaleId);
+  const newSaleId = await salesModel.createSaleId();  
+  const newSale = await salesModel.createSaleInfo(newSaleId);
 
-  // return { type: null, message: newSale };
+  return { type: null, message: newSale };
 };
 
 const getSales = async () => {

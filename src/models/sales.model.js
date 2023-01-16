@@ -2,24 +2,23 @@ const connection = require('./connection');
 
 const createSaleId = async () => {
   const newSale = await connection.execute(
-    'INSERT INTO sales (date) VALUE (now())',
+    'INSERT INTO sales (date) VALUE (?)',
+    [new Date()],
   );
 
   return newSale.insertId;
 };
 
-const createSaleInfo = async (saleId, salesToCreate) => {
-  Promise.all(
-    salesToCreate.forEach(async ({ productId, quantity }) => {
-      await connection.execute(
-        'INSERT INTO (sales_products) VALUES (?, ?, ?)',
-        [saleId, productId, quantity],
-      );
-    }),
-  );
+const createSaleInfo = async (saleId, saleToCreate) => {
+  saleToCreate.forEach(async ({ productId, quantity }) => {
+    await connection.execute(
+      'INSERT INTO sales_products (sale_id, product_id, quantity) VALUE (?, ?, ?)',
+      [saleId, productId, quantity],
+    );
+  });
   const newSale = {
     id: saleId,
-    itemsSold: salesToCreate,
+    itemsSold: saleToCreate,
   };
 
   return newSale;
