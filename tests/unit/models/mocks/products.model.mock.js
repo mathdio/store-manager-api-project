@@ -18,7 +18,13 @@ const singleProduct = {
   name: 'Martelo de Thor',
 };
 
+const editedProduct = {
+  id: 1,
+  name: 'Stormbreaker',
+};
+
 module.exports = {
   productsFromDB,
   singleProduct,
+  editedProduct
 };
