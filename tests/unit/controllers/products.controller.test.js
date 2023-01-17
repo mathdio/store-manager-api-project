@@ -13,7 +13,7 @@ describe('Products Controller\'s unit tests', function () {
   afterEach(sinon.restore);
 
   describe('List all products', function () {
-    it('If it returns a successful response', async function () {
+    it('If it returns a successful response with a list of all products', async function () {
       const mockResolve = { type: null, message: productsList };
       sinon.stub(productsService, 'getProducts').resolves(mockResolve);
 
@@ -29,7 +29,7 @@ describe('Products Controller\'s unit tests', function () {
   });
 
   describe('List a product by id', function () {
-    it('If it returns a successful response', async function () {
+    it('If it returns a successful response with a product', async function () {
       const mockResolve = { type: null, message: singleProduct };
       sinon.stub(productsService, 'getById').resolves(mockResolve);
 
@@ -55,6 +55,36 @@ describe('Products Controller\'s unit tests', function () {
       await productsController.getById(req, res);
       expect(res.status).to.have.been.calledOnceWith(404);
       expect(res.json).to.have.been.calledOnceWith({ message: 'Product not found' });
+    });
+  });
+
+  describe('Create a product', function () {
+    it('If it returns a successful response with the created product', async function () {
+      const mockResolve = { type: null, message: singleProduct }
+      sinon.stub(productsService, 'createProduct').resolves(mockResolve);
+
+      const req = { body: { name: 'Martelo de Thor' } };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.createProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(201);
+      expect(res.json).to.have.been.calledOnceWith(singleProduct);
+    });
+
+    it('If it resturns an INVALID_INPUT error', async function () {
+      const mockResolve = { type: 'INVALID_INPUT', message: '"name" length must be at least 5 characters long' };
+      sinon.stub(productsService, 'createProduct').resolves(mockResolve);
+
+      const req = { body: { name: 'Thor' } };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      
+      await productsController.createProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(422);
+      expect(res.json).to.have.been.calledOnceWith({ message: '"name" length must be at least 5 characters long' });
     });
   });
 });
