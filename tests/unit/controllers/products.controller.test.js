@@ -73,7 +73,7 @@ describe('Products Controller\'s unit tests', function () {
       expect(res.json).to.have.been.calledOnceWith(singleProduct);
     });
 
-    it('If it resturns an INVALID_INPUT error', async function () {
+    it('If it returns an INVALID_INPUT error', async function () {
       const mockResolve = { type: 'INVALID_INPUT', message: '"name" length must be at least 5 characters long' };
       sinon.stub(productsService, 'createProduct').resolves(mockResolve);
 
@@ -106,7 +106,7 @@ describe('Products Controller\'s unit tests', function () {
       expect(res.json).to.have.been.calledOnceWith(singleProduct);
     });
 
-    it('If it resturns an INVALID_INPUT error', async function () {
+    it('If it returns an INVALID_INPUT error', async function () {
       const mockResolve = { type: 'INVALID_INPUT', message: '"name" length must be at least 5 characters long' };
       sinon.stub(productsService, 'editProduct').resolves(mockResolve);
 
@@ -121,6 +121,36 @@ describe('Products Controller\'s unit tests', function () {
       await productsController.editProduct(req, res);
       expect(res.status).to.have.been.calledOnceWith(422);
       expect(res.json).to.have.been.calledOnceWith({ message: '"name" length must be at least 5 characters long' });
+    });
+  });
+
+  describe('Delete a product', function () {
+    it('If it returns a successful response', async function () {
+      const mockResolve = { type: null, message: '' }
+      sinon.stub(productsService, 'deleteProduct').resolves(mockResolve);
+
+      const req = { params: { id: '1' } };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.deleteProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(204);
+      expect(res.json).to.have.been.calledOnceWith('');
+    });
+
+    it('If it returns an PRODUCT_NOT_FOUND error', async function () {
+      const mockResolve = { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+      sinon.stub(productsService, 'deleteProduct').resolves(mockResolve);
+
+      const req = { params: { id: '999' } };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      
+      await productsController.deleteProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(404);
+      expect(res.json).to.have.been.calledOnceWith({ message: 'Product not found' });
     });
   });
 });
