@@ -1,7 +1,7 @@
 const { salesModel, productsModel } = require('../models');
 const validateSalesInputFields = require('../validations/validateSalesInputFields');
 
-const createSales = async (saleToCreate) => {
+const createSale = async (saleToCreate) => {
   const error = validateSalesInputFields(saleToCreate);
   if (error) return error;
 
@@ -29,8 +29,19 @@ const getById = async (saleId) => {
   return { type: null, message: sale };
 };
 
+const deleteSale = async (id) => {
+  const saleToDelete = await salesModel.getById(id);
+  if (saleToDelete.length < 1) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+
+  await salesModel.deleteSale(id);
+
+  const wasDeleted = await salesModel.getById(id);
+  if (wasDeleted.length < 1) return { type: null, message: '' };
+};
+
 module.exports = {
-  createSales,
+  createSale,
   getSales,
   getById,
+  deleteSale,
 };

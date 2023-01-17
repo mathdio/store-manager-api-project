@@ -41,7 +41,7 @@ describe('Products Service\'s unit tests', function () {
     it('If it returns invalid id error', async function () {
       const expected = {
         type: 'INVALID_INPUT',
-        message: 'id value mus be greater than or equal to 1',
+        message: 'id value must be greater than or equal to 1',
       };
 
       const result = await productsService.getById(0);
@@ -111,7 +111,7 @@ describe('Products Service\'s unit tests', function () {
     it("If it returns invalid id error", async function () {
       const expected = {
         type: "INVALID_INPUT",
-        message: "id value mus be greater than or equal to 1",
+        message: "id value must be greater than or equal to 1",
       };
 
       const result = await productsService.deleteProduct(0);
