@@ -1,12 +1,17 @@
-const { salesModel } = require('../models');
+const { salesModel, productsModel } = require('../models');
 const validateSalesInputFields = require('../validations/validateSalesInputFields');
 
 const createSales = async (saleToCreate) => {
   const error = validateSalesInputFields(saleToCreate);
   if (error) return error;
 
+  const productsInDatabase = await productsModel.getProducts();
+  const idsInDatabase = productsInDatabase.map(({ id }) => id);
+  const notAvailable = saleToCreate.some(({ productId }) => !idsInDatabase.includes(productId));
+  if (notAvailable) return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+
   const newSaleId = await salesModel.createSaleId();  
-  const newSale = await salesModel.createSaleInfo(newSaleId);
+  const newSale = await salesModel.createSaleInfo(newSaleId, saleToCreate);
 
   return { type: null, message: newSale };
 };
