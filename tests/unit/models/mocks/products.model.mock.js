@@ -23,8 +23,16 @@ const editedProduct = {
   name: 'Stormbreaker',
 };
 
+const searchedByName = [
+  {
+    id: 1,
+    name: "Martelo de Thor",
+  },
+];
+
 module.exports = {
   productsFromDB,
   singleProduct,
-  editedProduct
+  editedProduct,
+  searchedByName
 };

@@ -18,7 +18,15 @@ const singleProduct = {
   name: 'Martelo de Thor',
 };
 
+const searchedByName = [
+  {
+    id: 1,
+    name: "Martelo de Thor",
+  },
+];
+
 module.exports = {
   productsList,
   singleProduct,
+  searchedByName
 };

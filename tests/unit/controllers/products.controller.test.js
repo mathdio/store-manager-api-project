@@ -4,7 +4,7 @@ const sinonChai = require('sinon-chai');
 
 const { productsController } = require('../../../src/controllers');
 const { productsService } = require('../../../src/services');
-const { productsList, singleProduct } = require('./mocks/products.controller.mock');
+const { productsList, singleProduct, searchedByName } = require('./mocks/products.controller.mock');
 
 const { expect } = chai;
 chai.use(sinonChai);
@@ -149,6 +149,36 @@ describe('Products Controller\'s unit tests', function () {
       res.json = sinon.stub().returns();
       
       await productsController.deleteProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(404);
+      expect(res.json).to.have.been.calledOnceWith({ message: 'Product not found' });
+    });
+  });
+
+  describe('List products queried by name', function () {
+    it('If it returns a successful response with a list of products', async function () {
+      const mockResolve = { type: null, message: searchedByName }
+      sinon.stub(productsService, 'getByName').resolves(mockResolve);
+
+      const req = { query: { q: 'Martelo' } };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.getByName(req, res);
+      expect(res.status).to.have.been.calledOnceWith(200);
+      expect(res.json).to.have.been.calledOnceWith(searchedByName);
+    });
+
+    it("If it returns a PRODUCT_NOT_FOUND error", async function () {
+      const mockResolve = { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+      sinon.stub(productsService, "getByName").resolves(mockResolve);
+
+      const req = { query: { q: "Thanos" } };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.getByName(req, res);
       expect(res.status).to.have.been.calledOnceWith(404);
       expect(res.json).to.have.been.calledOnceWith({ message: 'Product not found' });
     });

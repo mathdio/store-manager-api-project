@@ -3,7 +3,7 @@ const sinon = require('sinon');
 
 const { productsModel } = require('../../../src/models');
 const { productsService } = require('../../../src/services');
-const { productsList, singleProduct } = require('./mocks/products.service.mock');
+const { productsList, singleProduct, searchedByName } = require('./mocks/products.service.mock');
 
 
 describe('Products Service\'s unit tests', function () {
@@ -131,7 +131,7 @@ describe('Products Service\'s unit tests', function () {
       expect(result).to.deep.equal(expected);
     });
 
-    it("If it returns edited product successfully", async function () {
+    it("If it returns the successful response after deleting a product", async function () {
       const mockResolve = undefined;
       const expected = { type: null, message: '' };
 
@@ -141,6 +141,32 @@ describe('Products Service\'s unit tests', function () {
       stub.onCall(1).resolves(mockResolve);
 
       const result = await productsService.deleteProduct(1);
+      expect(result).to.deep.equal(expected);
+    });
+  });
+
+  describe('List a list of products by name', function () {
+    it('If it returns a list of products successfully', async function () {
+      const expected = { type: null, message: searchedByName }
+      sinon.stub(productsModel, 'getByName').resolves(searchedByName);
+
+      const result = await productsService.getByName('Martelo');
+      expect(result).to.deep.equal(expected);
+    });
+
+    it("If it returns a PRODUCT_NOT_FOUND error", async function () {
+      const expected = { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' };
+      sinon.stub(productsModel, "getByName").resolves([]);
+
+      const result = await productsService.getByName("Thanos");
+      expect(result).to.deep.equal(expected);
+    });
+
+    it("If it lists all products", async function () {
+      const expected = { type: null, message: productsList };
+      sinon.stub(productsModel, 'getProducts').resolves(productsList);
+
+      const result = await productsService.getByName('');
       expect(result).to.deep.equal(expected);
     });
   });

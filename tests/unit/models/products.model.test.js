@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const connection = require('../../../src/models/connection');
 const { productsModel } = require('../../../src/models');
 
-const { productsFromDB, singleProduct, editedProduct } = require('./mocks/products.model.mock');
+const { productsFromDB, singleProduct, editedProduct, searchedByName } = require('./mocks/products.model.mock');
 
 describe('Products Model\'s unit tests', function () {
   afterEach(function () {
@@ -56,6 +56,15 @@ describe('Products Model\'s unit tests', function () {
       await productsModel.deleteProduct(1);
       const result = await productsModel.getById(1);
       expect(result).to.equal(undefined);
+    });
+  });
+
+  describe('Search products by name', function () {
+    it("If it returns a list of products", async function () {
+      sinon.stub(connection, "execute").resolves([searchedByName]);
+
+      const result = await productsModel.getByName("Martelo");
+      expect(result).to.equal(searchedByName);
     });
   });
 });
