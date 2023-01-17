@@ -45,10 +45,21 @@ const deleteProduct = async (id) => {
   );
 };
 
+const getByName = async (nameSearch) => {
+  const [result] = await connection.execute(
+    `SELECT * FROM products
+    WHERE name LIKE ?`,
+    [nameSearch],
+  );
+
+  return result;
+};
+
 module.exports = {
   getProducts,
   getById,
   createProduct,
   editProduct,
   deleteProduct,
+  getByName,
 };
