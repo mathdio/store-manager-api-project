@@ -39,9 +39,28 @@ const deleteSale = async (id) => {
   if (wasDeleted.length < 1) return { type: null, message: '' };
 };
 
+const editSale = async (saleId, saleToEdit) => {
+  const error = validateSalesInputFields(saleToEdit);
+  if (error) return error;
+
+  const productsInDatabase = await productsModel.getProducts();
+  const idsInDatabase = productsInDatabase.map(({ id }) => id);
+  const notAvailable = saleToEdit.some(
+    ({ productId }) => !idsInDatabase.includes(productId),
+  );
+  if (notAvailable) { return { type: 'PRODUCT_NOT_FOUND', message: 'Product not found' }; }
+
+  const saleVerification = await salesModel.getById(saleId);
+  if (saleVerification.length < 1) return { type: 'SALE_NOT_FOUND', message: 'Sale not found' };
+
+  const editedSale = await salesModel.editSale(saleId, saleToEdit);
+  return { type: null, message: editedSale };
+};
+
 module.exports = {
   createSale,
   getSales,
   getById,
   deleteSale,
+  editSale,
 };
