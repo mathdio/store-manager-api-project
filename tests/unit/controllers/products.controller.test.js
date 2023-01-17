@@ -87,4 +87,40 @@ describe('Products Controller\'s unit tests', function () {
       expect(res.json).to.have.been.calledOnceWith({ message: '"name" length must be at least 5 characters long' });
     });
   });
+
+  describe('Edit a product', function () {
+    it('If it returns a successful response with the edited product', async function () {
+      const mockResolve = { type: null, message: singleProduct }
+      sinon.stub(productsService, 'editProduct').resolves(mockResolve);
+
+      const req = {
+        body: { name: 'Martelo de Thor' },
+        params: { id: '1' }
+      };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+
+      await productsController.editProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(200);
+      expect(res.json).to.have.been.calledOnceWith(singleProduct);
+    });
+
+    it('If it resturns an INVALID_INPUT error', async function () {
+      const mockResolve = { type: 'INVALID_INPUT', message: '"name" length must be at least 5 characters long' };
+      sinon.stub(productsService, 'editProduct').resolves(mockResolve);
+
+      const req = {
+        body: { name: 'Martelo de Thor' },
+        params: { id: '1' }
+      };
+      const res = {};
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      
+      await productsController.editProduct(req, res);
+      expect(res.status).to.have.been.calledOnceWith(422);
+      expect(res.json).to.have.been.calledOnceWith({ message: '"name" length must be at least 5 characters long' });
+    });
+  });
 });
