@@ -11,8 +11,7 @@ const createSale = async (req, res) => {
 };
 
 const getSales = async (_req, res) => {
-  const { type, message } = await salesService.getSales();
-  if (type) return res.status(mapError(type)).json({ message });
+  const { message } = await salesService.getSales();
 
   return res.status(200).json(message);
 };
